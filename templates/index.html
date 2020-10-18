@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>My Chat App</h1>
+<div class="row justify-content-center">
+    <div class="col-3">
+        <form action="/chat">
+            <label>Your username:</label>
+            <input type="text" name="username" class="form-control">
+            <br>
+            <label>Enter room ID:</label>
+            <input type="text" name="room" class="form-control">
+            <br>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

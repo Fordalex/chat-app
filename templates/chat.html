@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Welcome {{ username }}, this is chat room {{ room }}</h1>
+<div id="messages"></div>
+
+<form>
+    <input type="text" placeholder="Enter your message here">
+    <button type="submit">Send</button>
+</form>
+
+{% endblock %}
+
+{% block sockets_js %}
+<script>
+    const socket = io.connect("http://localhost:5001/");
+
+    socket.on('connect', function() {
+        socket.emit('join_room', {
+            username: "{{ username }}",
+            room: "{{ room }}"
+        })
+    });
+
+    socket.on('join_room_announcement', function(data) {
+        $('#messages').append(`<b>${data.username}</b> has joined the room <br>` )
+    })
+</script>
+{% endblock %}
