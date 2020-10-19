@@ -3,8 +3,8 @@
 <h1>Welcome {{ username }}, this is chat room {{ room }}</h1>
 <div id="messages"></div>
 
-<form>
-    <input type="text" placeholder="Enter your message here">
+<form id="message_input_form">
+    <input type="text" placeholder="Enter your message here" id="message_input">
     <button type="submit">Send</button>
 </form>
 
@@ -22,7 +22,25 @@
     });
 
     socket.on('join_room_announcement', function(data) {
-        $('#messages').append(`<b>${data.username}</b> has joined the room <br>` )
+        $('#messages').append(`<b>${data.username}</b> has joined the room <br>` );
+    })
+
+
+    $('#message_input_form').submit(function(e) {
+        e.preventDefault();
+        var message = $('#message_input').val()
+        if (message.length > 0) {
+            socket.emit('send_message', {
+                username: "{{username}}",
+                room: "{{room}}",
+                message: message,
+            })
+        }
+        $('#message_input').val('')
+    });
+
+    socket.on('receive_message', function(data) {
+        $('#messages').append(`<p class="m-0"><b>${data.username}:</b>${data.message}</p>`);
     })
 </script>
 {% endblock %}

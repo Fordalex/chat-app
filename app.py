@@ -25,10 +25,24 @@ def chat():
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
+    """
+    Using sockets the room id will be passed into join_room to create a new room.
+    """
     app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
     join_room(data['room'])
     socketio.emit('join_room_announcement', data)    
 
+@socketio.on('send_message')
+def handle_send_message_event(data):
+    """
+    From the created room, when a message is sent the socketio.emit() function can take 3 arguments.
+    The last one being the room the message needs to be sent to.
+    """
+    app.logger.info("{} has sent a message to room {}: {}".format(data['username'], data['room'], data['message']))
+    socketio.emit('receive_message', data, room=data['room'])
+    
+
+    
 
 
 if __name__ == "__main__":
